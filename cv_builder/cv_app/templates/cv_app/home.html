@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI CV Builder</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --charcoal: #2c3e50;
+            --black: #1a1a1a;
+            --gray: #7b8794;
+            --purple: #8e44ad;
+            --light-purple: #bb8fce;
+            --light-gray: #f5f5f5;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            min-height: 100vh;
+            color: var(--black);
+        }
+
+        /* Navigation */
+        .navbar-custom {
+            background-color: var(--charcoal);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            padding: 12px 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 24px;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand i {
+            margin-right: 10px;
+            font-size: 28px;
+            color: var(--light-purple);
+        }
+
+        .nav-link {
+            color: white;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s ease;
+            margin: 0 8px;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--light-purple);
+        }
+
+        /* Purple underline effect for navigation links */
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--light-purple);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .btn-login {
+            background-color: transparent;
+            color: white;
+            border: 2px solid var(--light-purple);
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-login:hover {
+            background-color: rgba(187, 143, 206, 0.1);
+        }
+
+        .btn-signup {
+            background-color: var(--purple);
+            color: white;
+            border: 2px solid var(--purple);
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-signup:hover {
+            background-color: var(--light-purple);
+            border-color: var(--light-purple);
+            box-shadow: 0 5px 15px rgba(142, 68, 173, 0.4);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 100px 0;
+            text-align: center;
+            background: linear-gradient(135deg, var(--charcoal) 0%, var(--black) 100%);
+            color: white;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 40px;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--light-purple), white);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-section p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-section .btn-primary {
+            background-color: var(--purple);
+            border-color: var(--purple);
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .hero-section .btn-primary:hover {
+            background-color: var(--light-purple);
+            border-color: var(--light-purple);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(142, 68, 173, 0.4);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--purple);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: var(--charcoal);
+            font-weight: 600;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            color: var(--charcoal);
+            font-weight: 700;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            border: 1px solid #e0e0e0;
+            height: 100%;
+            background-color: white;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--light-purple);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            color: var(--purple);
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            color: var(--charcoal);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* How It Works Section */
+        .how-it-works-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--charcoal) 0%, var(--black) 100%);
+            color: white;
+            border-radius: 30px;
+            transition: all 0.4s ease;
+        }
+
+        .how-it-works-section:hover {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .step-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            height: 100%;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .step-card:hover::before {
+            left: 100%;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px);
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: var(--light-purple);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--purple), var(--light-purple));
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(142, 68, 173, 0.4);
+        }
+
+        .step-card:hover .step-number {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 20px rgba(142, 68, 173, 0.6);
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--light-purple);
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover .step-title {
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .step-description {
+            color: #e0e0e0;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover .step-description {
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--black);
+            color: white;
+            padding: 40px 0;
+            margin-top: 80px;
+            text-align: center;
+        }
+
+        .footer p {
+            margin-bottom: 0;
+            color: var(--gray);
+        }
+
+        .footer-links {
+            margin-top: 20px;
+        }
+
+        .footer-links a {
+            color: var(--light-purple);
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-section p {
+                font-size: 1.1rem;
+            }
+            
+            .navbar-nav {
+                text-align: center;
+                margin-top: 15px;
+            }
+            
+            .btn-login, .btn-signup {
+                display: block;
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-brain"></i> AI CV Builder
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Templates</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Examples</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Pricing</a>
+                    </li>
+                    
+                    {% if user.is_authenticated %}
+                     <!-- SHOW WHEN USER IS LOGGED IN -->
+                     <li class="nav-item">
+                         <span class="nav-link text-light">Welcome, <a href="{% url 'dashboard' %}" style="color: var(--light-purple); text-decoration: none;">{{ user.username }}</a>!</span>
+                     </li>
+                     <li class="nav-item">
+                       <a class="nav-link btn-login" href="{% url 'logout' %}">Logout</a>
+                     </li>
+                    {% else %}
+                        <!-- SHOW WHEN USER IS LOGGED OUT -->
+                        <li class="nav-item">
+                            <a class="nav-link btn-login" href="{% url 'login' %}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn-signup text-white" href="{% url 'signup' %}">Sign Up for Free</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="container mt-5 pt-5">
+        <div class="hero-section">
+            <h1>Create Professional CVs with AI</h1>
+            <p class="lead">Our AI-powered resume builder helps you create impressive CVs that stand out to employers and land you more interviews.</p>
+            <a href="{% url 'signup' %}"
+             class="btn btn-primary btn-lg">Get Started for Free</a>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">50K+</div>
+                        <div class="stat-label">CVs Created</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Satisfaction Rate</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">3x</div>
+                        <div class="stat-label">More Interviews</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">AI Support</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container">
+        <div class="features-section">
+            <h2 class="section-title">Why Choose AI CV Builder?</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h3>AI-Powered Content</h3>
+                        <p>Our advanced AI suggests powerful action verbs and industry-specific keywords to make your CV stand out.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <h3>Professional Templates</h3>
+                        <p>Choose from dozens of professionally designed templates that are ATS-friendly and visually appealing.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3>Quick & Easy</h3>
+                        <p>Create a polished CV in minutes with our intuitive interface and step-by-step guidance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="container">
+        <div class="how-it-works-section">
+            <h2 class="section-title text-white">How It Works</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">Sign Up Free</h3>
+                        <p class="step-description">Create your account in seconds. No credit card required to get started.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">Choose Template</h3>
+                        <p class="step-description">Select from professional, ATS-optimized CV templates for your industry.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">AI Optimization</h3>
+                        <p class="step-description">Our AI enhances your content with powerful keywords and industry terms.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h3 class="step-title">Download & Apply</h3>
+                        <p class="step-description">Download your professional CV and start applying for jobs with confidence.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <p>&copy; 2023 AI CV Builder. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Support</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
