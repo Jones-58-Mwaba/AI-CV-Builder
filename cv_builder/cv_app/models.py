@@ -18,7 +18,7 @@ class CV(models.Model):
     # 2. Professional Summary
     professional_summary = models.TextField(blank=True)
     
-    def _str_(self):
+    def _str_(self):Models
         return f"{self.user.username} - {self.title}"
 
 class Experience(models.Model):
