@@ -60,9 +60,11 @@
                     <p class="mb-0">Ready to create professional CVs that get you hired?</p>
                 </div>
                 <div class="col-md-4 text-end">
-                    <button class="btn btn-light btn-lg">
-                        <i class="fas fa-plus me-2"></i>Create New CV
-                    </button>
+                     <!-- Replace the button in welcome section -->
+                    <a href="{% url 'create_cv' %}" 
+                          class="btn btn-light btn-lg">
+                            <i class="fas fa-plus me-2"></i>Create New CV
+                    </a>
                 </div>
             </div>
         </div>
@@ -115,9 +117,10 @@
                         <i class="fas fa-file-alt fa-4x text-primary mb-3"></i>
                         <h3>Create Your First CV</h3>
                         <p class="text-muted mb-4">Start building your professional resume with AI assistance</p>
-                        <button class="btn btn-primary btn-lg px-5">
-                            <i class="fas fa-plus me-2"></i>Create New CV
-                        </button>
+                        <a href="{% url 'create_cv' %}"
+                                  class="btn btn-light btn-lg">
+                                 <i class="fas fa-plus me-2"></i>Create New CV
+                        </a>
                     </div>
                 </div>
             </div>
