@@ -70,30 +70,111 @@ def edit_cv(request, cv_id):
     except CV.DoesNotExist:
         return redirect('dashboard')
     
-    # Handle form submission
     if request.method == 'POST':
-        # Update personal information
+        print("Form submitted!")  # Debug line
+        
+        # Update CV basic information
         cv.full_name = request.POST.get('full_name', '')
         cv.email = request.POST.get('email', '')
         cv.phone = request.POST.get('phone', '')
         cv.location = request.POST.get('location', '')
-        cv.linkedin = request.POST.get('linkedin', '')
+        
+        # Handle date field properly
+        date_of_birth = request.POST.get('date_of_birth')
+        cv.date_of_birth = date_of_birth if date_of_birth else None
+        
+        cv.gender = request.POST.get('gender', '')
+        cv.nationality = request.POST.get('nationality', '')
+        cv.languages = request.POST.get('languages', '')
+        cv.marital_status = request.POST.get('marital_status', '')
+        cv.linkedin_url = request.POST.get('linkedin', '')
+        cv.github_url = request.POST.get('portfolio', '')
         cv.professional_summary = request.POST.get('professional_summary', '')
+        cv.additional_info = request.POST.get('additional_info', '')
+        
         cv.save()
         
-        # Handle experiences
-        company = request.POST.get('company')
-        position = request.POST.get('position')
-        if company and position:  # Only save if required fields exist
-            Experience.objects.create(
-                cv=cv,
-                company=company,
-                job_title=position,
-                start_date=request.POST.get('start_date', ''),
-                end_date=request.POST.get('end_date', ''),
-                description=request.POST.get('description', '')
-            )
+        # Handle Work Experience
+        job_titles = request.POST.getlist('experience_job_title')
+        companies = request.POST.getlist('experience_company')
+        start_dates = request.POST.getlist('experience_start_date')
+        end_dates = request.POST.getlist('experience_end_date')
+        descriptions = request.POST.getlist('experience_description')
+        achievements = request.POST.getlist('experience_achievements')
         
+        existing_experiences = list(cv.experiences.all())
+        
+        for i in range(len(job_titles)):
+            if job_titles[i] and companies[i]:
+                if i < len(existing_experiences):
+                    experience = existing_experiences[i]
+                    experience.job_title = job_titles[i]
+                    experience.company = companies[i]
+                    experience.start_date = start_dates[i]
+                    experience.end_date = end_dates[i]
+                    experience.description = descriptions[i]
+                    experience.achievements = achievements[i]
+                    experience.save()
+                else:
+                    Experience.objects.create(
+                        cv=cv,
+                        job_title=job_titles[i],
+                        company=companies[i],
+                        start_date=start_dates[i],
+                        end_date=end_dates[i],
+                        description=descriptions[i],
+                        achievements=achievements[i]
+                    )
+        
+        if len(job_titles) < len(existing_experiences):
+            for i in range(len(job_titles), len(existing_experiences)):
+                existing_experiences[i].delete()
+
+        # NEW: Handle Education
+        institutions = request.POST.getlist('education_institution')
+        degrees = request.POST.getlist('education_degree')
+        fields_of_study = request.POST.getlist('education_field_of_study')
+        education_start_dates = request.POST.getlist('education_start_date')
+        education_end_dates = request.POST.getlist('education_end_date')
+        education_descriptions = request.POST.getlist('education_description')
+        
+        existing_educations = list(cv.educations.all())
+        
+        for i in range(len(institutions)):
+            if institutions[i] and degrees[i]:  # Only process if required fields are filled
+                if i < len(existing_educations):
+                    # Update existing education
+                    education = existing_educations[i]
+                    education.institution = institutions[i]
+                    education.degree = degrees[i]
+                    education.field_of_study = fields_of_study[i]
+                    education.start_date = education_start_dates[i]
+                    education.end_date = education_end_dates[i]
+                    education.description = education_descriptions[i]
+                    education.save()  # ← USING .save()!
+                else:
+                    # Create new education
+                    Education.objects.create(
+                        cv=cv,
+                        institution=institutions[i],
+                        degree=degrees[i],
+                        field_of_study=fields_of_study[i],
+                        start_date=education_start_dates[i],
+                        end_date=education_end_dates[i],
+                        description=education_descriptions[i]
+                    )
+        
+        # Delete any extra educations that are no longer needed
+        if len(institutions) < len(existing_educations):
+            for i in range(len(institutions), len(existing_educations)):
+                existing_educations[i].delete()
+        
+        print("CV, Experiences, and Education saved successfully!")
+        messages.success(request, 'CV updated successfully!')
         return redirect('edit_cv', cv_id=cv.id)
     
-    return render(request, 'cv_app/edit_cv.html', {'cv': cv})
+    # For GET requests, pre-fill the form with existing data
+    context = {
+        'cv': cv,
+    }
+    return render(request, 'cv_app/edit_cv.html', context)

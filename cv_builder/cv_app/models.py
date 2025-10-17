@@ -2,24 +2,47 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class CV(models.Model):
+    GENDER_CHOICES = [
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'Other'),
+        ('prefer_not_to_say', 'Prefer not to say'),
+    ]
+    
+    MARITAL_STATUS_CHOICES = [
+        ('single', 'Single'),
+        ('married', 'Married'),
+        ('divorced', 'Divorced'),
+        ('widowed', 'Widowed'),
+    ]
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=200, default="My Professional CV")
+    title = models.CharField(max_length=200, default="My CV")
+    
+    # Basic Info
+    full_name = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    location = models.CharField(max_length=255)
+    
+    # Personal Details
+    date_of_birth = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=20, choices=GENDER_CHOICES, blank=True)
+    nationality = models.CharField(max_length=100, blank=True)
+    languages = models.CharField(max_length=255, blank=True)
+    marital_status = models.CharField(max_length=20, choices=MARITAL_STATUS_CHOICES, blank=True)
+    additional_info = models.TextField(blank=True)
+    
+    # Professional
+    professional_summary = models.TextField(blank=True)
+    linkedin_url = models.URLField(blank=True)
+    github_url = models.URLField(blank=True)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    # 1. Contact Information
-    full_name = models.CharField(max_length=100, blank=True)
-    email = models.EmailField(blank=True)
-    phone = models.CharField(max_length=20, blank=True)
-    address = models.CharField(max_length=200, blank=True)
-    linkedin = models.URLField(blank=True)
-    portfolio = models.URLField(blank=True)
-    
-    # 2. Professional Summary
-    professional_summary = models.TextField(blank=True)
-    
-    def _str_(self):Models
-        return f"{self.user.username} - {self.title}"
+    def _str_(self):
+        return f"{self.full_name} - {self.title}"
 
 class Experience(models.Model):
     cv = models.ForeignKey(CV, on_delete=models.CASCADE, related_name='experiences')
@@ -35,13 +58,12 @@ class Experience(models.Model):
 
 class Education(models.Model):
     cv = models.ForeignKey(CV, on_delete=models.CASCADE, related_name='educations')
-    degree = models.CharField(max_length=100)
     institution = models.CharField(max_length=100)
+    degree = models.CharField(max_length=100)
     field_of_study = models.CharField(max_length=100, blank=True)
     start_date = models.CharField(max_length=20, blank=True)
     end_date = models.CharField(max_length=20, blank=True)
-    gpa = models.CharField(max_length=10, blank=True)
-    relevant_coursework = models.TextField(blank=True)
+    description = models.TextField(blank=True)
     
     def _str_(self):
         return f"{self.degree} at {self.institution}"
@@ -49,8 +71,8 @@ class Education(models.Model):
 class Skill(models.Model):
     cv = models.ForeignKey(CV, on_delete=models.CASCADE, related_name='skills')
     name = models.CharField(max_length=50)
-    category = models.CharField(max_length=50, blank=True)  # Technical, Soft, Language
-    proficiency = models.CharField(max_length=20, blank=True)  # Beginner, Intermediate, Expert
+    category = models.CharField(max_length=50, blank=True)
+    proficiency = models.CharField(max_length=20, blank=True)
     
     def _str_(self):
         return self.name
