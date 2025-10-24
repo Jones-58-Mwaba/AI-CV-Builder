@@ -381,151 +381,407 @@
                                 <i class="fas fa-tools me-2"></i>Skills
                             </h3>
                             <div>
-                                <button type="button" class="btn btn-ai btn-sm me-2">
+                                <button type="button" class="btn btn-ai btn-sm me-2" id="ai-suggest-skills">
                                     <i class="fas fa-robot me-1"></i>AI Suggest Skills
                                 </button>
-                                <button type="button" class="btn btn-add btn-sm">
+                                <button type="button" class="btn btn-add btn-sm" id="add-skill">
                                     <i class="fas fa-plus me-1"></i>Add Skill
                                 </button>
                             </div>
                         </div>
                         
-                        <div class="row">
-                            <div class="col-md-8 mb-3">
-                                <input type="text" class="form-control" placeholder="e.g., Python, JavaScript, Project Management">
-                                <div class="form-text">Separate skills with commas</div>
+                        <!-- Skills Forms Container -->
+                        <div id="skills-forms">
+                            {% for skill in cv.skills.all %}
+                            <div class="skill-form mb-3 p-3 border rounded">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Skill Name *</label>
+                                        <input type="text" class="form-control" name="skill_name" value="{{ skill.name }}" placeholder="e.g., Python, Project Management" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Category *</label>
+                                        <select class="form-select" name="skill_category" required>
+                                            <option value="technical" {% if skill.category == 'technical' %}selected{% endif %}>Technical Skills</option>
+                                            <option value="soft" {% if skill.category == 'soft' %}selected{% endif %}>Soft Skills</option>
+                                            <option value="languages" {% if skill.category == 'languages' %}selected{% endif %}>Languages</option>
+                                            <option value="tools" {% if skill.category == 'tools' %}selected{% endif %}>Tools & Technologies</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 text-end">
+                                        <button type="button" class="btn btn-danger btn-sm remove-skill">
+                                            <i class="fas fa-trash me-1"></i>Remove
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <select class="form-select">
-                                    <option>Technical Skills</option>
-                                    <option>Soft Skills</option>
-                                    <option>Languages</option>
-                                    <option>Certifications</option>
-                                </select>
+                            {% empty %}
+                            <!-- Empty template for new skills -->
+                            <div class="skill-form mb-3 p-3 border rounded">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Skill Name *</label>
+                                        <input type="text" class="form-control" name="skill_name" placeholder="e.g., Python, Project Management" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Category *</label>
+                                        <select class="form-select" name="skill_category" required>
+                                            <option value="technical">Technical Skills</option>
+                                            <option value="soft">Soft Skills</option>
+                                            <option value="languages">Languages</option>
+                                            <option value="tools">Tools & Technologies</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 text-end">
+                                        <button type="button" class="btn btn-danger btn-sm remove-skill">
+                                            <i class="fas fa-trash me-1"></i>Remove
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
+                            {% endfor %}
                         </div>
                     </div>
-
-                    <!-- Projects -->
+                    
+                     <!-- Projects -->
+<div class="form-section">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="section-header mb-0">
+            <i class="fas fa-code me-2"></i>Projects
+        </h3>
+        <button type="button" class="btn btn-add" id="add-project">
+            <i class="fas fa-plus me-1"></i>Add Project
+        </button>
+    </div>
+    
+    <!-- Projects Forms Container -->
+    <div id="projects-forms">
+        {% for project in cv.projects.all %}
+        <div class="project-form mb-4 p-3 border rounded">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <label class="form-label">Project Name *</label>
+                    <input type="text" class="form-control" name="project_name" value="{{ project.name }}" placeholder="E-commerce Website" required>
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label">Technologies Used</label>
+                    <input type="text" class="form-control" name="project_technologies" value="{{ project.technologies }}" placeholder="React, Node.js, MongoDB">
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label">Project URL</label>
+                    <input type="url" class="form-control" name="project_url" value="{{ project.project_url }}" placeholder="https://github.com/yourusername/project">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Start Date</label>
+                    <input type="text" class="form-control" name="project_start_date" value="{{ project.start_date }}" placeholder="Jan 2023">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">End Date</label>
+                    <input type="text" class="form-control" name="project_end_date" value="{{ project.end_date }}" placeholder="Mar 2023">
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" name="project_description" rows="3" placeholder="Describe the project, your role, and outcomes...">{{ project.description }}</textarea>
+                    <button type="button" class="btn btn-ai btn-sm mt-2">
+                        <i class="fas fa-robot me-1"></i>AI Enhance Description
+                    </button>
+                </div>
+                <div class="col-12 text-end">
+                    <button type="button" class="btn btn-danger btn-sm remove-project">
+                        <i class="fas fa-trash me-1"></i>Remove
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <!-- Empty template for new projects -->
+        <div class="project-form mb-4 p-3 border rounded">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <label class="form-label">Project Name *</label>
+                    <input type="text" class="form-control" name="project_name" placeholder="E-commerce Website" required>
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label">Technologies Used</label>
+                    <input type="text" class="form-control" name="project_technologies" placeholder="React, Node.js, MongoDB">
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label">Project URL</label>
+                    <input type="url" class="form-control" name="project_url" placeholder="https://github.com/yourusername/project">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Start Date</label>
+                    <input type="text" class="form-control" name="project_start_date" placeholder="Jan 2023">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">End Date</label>
+                    <input type="text" class="form-control" name="project_end_date" placeholder="Mar 2023">
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" name="project_description" rows="3" placeholder="Describe the project, your role, and outcomes..."></textarea>
+                    <button type="button" class="btn btn-ai btn-sm mt-2">
+                        <i class="fas fa-robot me-1"></i>AI Enhance Description
+                    </button>
+                </div>
+                <div class="col-12 text-end">
+                    <button type="button" class="btn btn-danger btn-sm remove-project">
+                        <i class="fas fa-trash me-1"></i>Remove
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+             <!-- Certifications Section-->
+<div class="form-section">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="section-header mb-0">
+            <i class="fas fa-trophy me-2"></i>Certifications
+        </h3>
+        <button type="button" class="btn btn-add" id="add-certification">
+            <i class="fas fa-plus me-1"></i>Add Certification
+        </button>
+    </div>
+    
+    <!-- Certifications Forms Container -->
+    <div id="certifications-forms">
+        {% for certification in cv.certifications.all %}
+        <div class="certification-form mb-4 p-3 border rounded">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Certification/Award Name *</label>
+                    <input type="text" class="form-control" name="certification_name" value="{{ certification.name }}" placeholder="AWS Certified Developer" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Issuing Organization *</label>
+                    <input type="text" class="form-control" name="certification_organization" value="{{ certification.issuing_organization }}" placeholder="Amazon Web Services" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Date Earned</label>
+                    <input type="text" class="form-control" name="certification_issue_date" value="{{ certification.issue_date }}" placeholder="Jan 2023">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Expiry Date</label>
+                    <input type="text" class="form-control" name="certification_expiry_date" value="{{ certification.expiry_date }}" placeholder="Jan 2026">
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label">Credential URL</label>
+                    <input type="url" class="form-control" name="certification_url" value="{{ certification.credential_url }}" placeholder="https://example.com/certificate">
+                </div>
+                <div class="col-12 text-end">
+                    <button type="button" class="btn btn-danger btn-sm remove-certification">
+                        <i class="fas fa-trash me-1"></i>Remove
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <!-- Empty template for new certifications -->
+        <div class="certification-form mb-4 p-3 border rounded">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Certification/Award Name *</label>
+                    <input type="text" class="form-control" name="certification_name" placeholder="AWS Certified Developer" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Issuing Organization *</label>
+                    <input type="text" class="form-control" name="certification_organization" placeholder="Amazon Web Services" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Date Earned</label>
+                    <input type="text" class="form-control" name="certification_issue_date" placeholder="Jan 2023">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Expiry Date</label>
+                    <input type="text" class="form-control" name="certification_expiry_date" placeholder="Jan 2026">
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label">Credential URL</label>
+                    <input type="url" class="form-control" name="certification_url" placeholder="https://example.com/certificate">
+                </div>
+                <div class="col-12 text-end">
+                    <button type="button" class="btn btn-danger btn-sm remove-certification">
+                        <i class="fas fa-trash me-1"></i>Remove
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>     
+                <!-- Achievements -->
                     <div class="form-section">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h3 class="section-header mb-0">
-                                <i class="fas fa-code me-2"></i>Projects
+                                <i class="fas fa-award me-2"></i>Achievements & Awards
                             </h3>
-                            <button type="button" class="btn btn-add">
-                                <i class="fas fa-plus me-1"></i>Add Project
+                            <button type="button" class="btn btn-add" id="add-achievement">
+                                <i class="fas fa-plus me-1"></i>Add Achievement
                             </button>
                         </div>
                         
-                        <div class="project-form mb-4 p-3 border rounded">
-                            <div class="row">
-                                <div class="col-12 mb-3">
-                                    <label class="form-label">Project Name *</label>
-                                    <input type="text" class="form-control" placeholder="E-commerce Website">
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label class="form-label">Technologies Used</label>
-                                    <input type="text" class="form-control" placeholder="React, Node.js, MongoDB">
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label class="form-label">Project URL</label>
-                                    <input type="url" class="form-control" placeholder="https://github.com/yourusername/project">
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label class="form-label">Description</label>
-                                    <textarea class="form-control" rows="3" placeholder="Describe the project, your role, and outcomes..."></textarea>
-                                    <button type="button" class="btn btn-ai btn-sm mt-2">
-                                        <i class="fas fa-robot me-1"></i>AI Enhance Description
-                                    </button>
+                        <!-- Achievements Forms Container -->
+                        <div id="achievements-forms">
+                            {% for achievement in cv.achievements.all %}
+                            <div class="achievement-form mb-4 p-3 border rounded">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Achievement/Award Title *</label>
+                                        <input type="text" class="form-control" name="achievement_title" value="{{ achievement.title }}" placeholder="Employee of the Year" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Issuing Organization</label>
+                                        <input type="text" class="form-control" name="achievement_organization" value="{{ achievement.issuing_organization }}" placeholder="Company Name">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Date Received</label>
+                                        <input type="text" class="form-control" name="achievement_date" value="{{ achievement.date }}" placeholder="Dec 2023">
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" name="achievement_description" rows="3" placeholder="Describe the achievement, criteria, and significance...">{{ achievement.description }}</textarea>
+                                        <button type="button" class="btn btn-ai btn-sm mt-2">
+                                            <i class="fas fa-robot me-1"></i>AI Enhance Description
+                                        </button>
+                                    </div>
+                                    <div class="col-12 text-end">
+                                        <button type="button" class="btn btn-danger btn-sm remove-achievement">
+                                            <i class="fas fa-trash me-1"></i>Remove
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
+                            {% empty %}
+                            <!-- Empty template for new achievements -->
+                            <div class="achievement-form mb-4 p-3 border rounded">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Achievement/Award Title *</label>
+                                        <input type="text" class="form-control" name="achievement_title" placeholder="Employee of the Year" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Issuing Organization</label>
+                                        <input type="text" class="form-control" name="achievement_organization" placeholder="Company Name">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Date Received</label>
+                                        <input type="text" class="form-control" name="achievement_date" placeholder="Dec 2023">
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" name="achievement_description" rows="3" placeholder="Describe the achievement, criteria, and significance..."></textarea>
+                                        <button type="button" class="btn btn-ai btn-sm mt-2">
+                                            <i class="fas fa-robot me-1"></i>AI Enhance Description
+                                        </button>
+                                    </div>
+                                    <div class="col-12 text-end">
+                                        <button type="button" class="btn btn-danger btn-sm remove-achievement">
+                                            <i class="fas fa-trash me-1"></i>Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
 
-                    <!-- Certifications & Achievements -->
+                   <!-- References -->
                     <div class="form-section">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h3 class="section-header mb-0">
-                                <i class="fas fa-trophy me-2"></i>Certifications & Achievements
+                                <i class="fas fa-users me-2"></i>References
                             </h3>
-                            <button type="button" class="btn btn-add">
-                                <i class="fas fa-plus me-1"></i>Add Certification
+                            <button type="button" class="btn btn-add" id="add-reference">
+                                <i class="fas fa-plus me-1"></i>Add Reference
                             </button>
                         </div>
                         
-                        <div class="achievement-form mb-4 p-3 border rounded">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Certification/Award Name *</label>
-                                    <input type="text" class="form-control" placeholder="AWS Certified Developer">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Issuing Organization *</label>
-                                    <input type="text" class="form-control" placeholder="Amazon Web Services">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Date Earned</label>
-                                    <input type="month" class="form-control">
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label class="form-label">Description</label>
-                                    <textarea class="form-control" rows="2" placeholder="Details about the certification or achievement..."></textarea>
-                                    <button type="button" class="btn btn-ai btn-sm mt-2">
-                                        <i class="fas fa-robot me-1"></i>AI Enhance Description
-                                    </button>
+                        <!-- References Forms Container -->
+                        <div id="references-forms">
+                            {% for reference in cv.references.all %}
+                            <div class="reference-form mb-4 p-3 border rounded">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Reference Name</label>
+                                        <input type="text" class="form-control" name="reference_name" value="{{ reference.name }}" placeholder="Dr. Someone Buntu">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Position</label>
+                                        <input type="text" class="form-control" name="reference_position" value="{{ reference.position }}" placeholder="Professor of Marketing">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Company/Institution</label>
+                                        <input type="text" class="form-control" name="reference_company" value="{{ reference.company }}" placeholder="University of Zambia">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="reference_email" value="{{ reference.email }}" placeholder="someone.buntu@unza.zm">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Phone</label>
+                                        <input type="tel" class="form-control" name="reference_phone" value="{{ reference.phone }}" placeholder="+260 123 456 789">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Relationship</label>
+                                        <input type="text" class="form-control" name="reference_relationship" value="{{ reference.relationship }}" placeholder="Former Professor, Supervisor, etc.">
+                                    </div>
+                                    <div class="col-12 text-end">
+                                        <button type="button" class="btn btn-danger btn-sm remove-reference">
+                                            <i class="fas fa-trash me-1"></i>Remove
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
+                            {% empty %}
+                            <!-- Empty template for new references -->
+                            <div class="reference-form mb-4 p-3 border rounded">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Reference Name</label>
+                                        <input type="text" class="form-control" name="reference_name" placeholder="Dr. Someone Buntu">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Position</label>
+                                        <input type="text" class="form-control" name="reference_position" placeholder="Professor of Marketing">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Company/Institution</label>
+                                        <input type="text" class="form-control" name="reference_company" placeholder="University of Zambia">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="reference_email" placeholder="someone.buntu@unza.zm">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Phone</label>
+                                        <input type="tel" class="form-control" name="reference_phone" placeholder="+260 123 456 789">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Relationship</label>
+                                        <input type="text" class="form-control" name="reference_relationship" placeholder="Former Professor, Supervisor, etc.">
+                                    </div>
+                                    <div class="col-12 text-end">
+                                        <button type="button" class="btn btn-danger btn-sm remove-reference">
+                                            <i class="fas fa-trash me-1"></i>Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
-                    </div>
 
-                    <!-- References -->
-                    <div class="form-section">
-                        <h3 class="section-header">
-                         <i class="fas fa-users me-2"></i>References
-                        </h3>
-            
-                        <div class="references-form mb-4 p-3 border rounded">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Reference Name</label>
-                                    <input type="text" class="form-control" placeholder="(e.g.Dr. someone buntu)">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                     <label class="form-label">Position</label>
-                                     <input type="text" class="form-control" placeholder="(e.g.Professor of Marketing and Projcet Management, Banking and finance Department  H.O.D-School of Business, etc.)">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Company/Institution</label>
-                                    <input type="text" class="form-control" placeholder="(e.g.University of Zambia)">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Email</label>
-                                    <input type="email" class="form-control" placeholder="(e.g.someone.buntu@unza.z)m)">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Phone</label>
-                                    <input type="tel" class="form-control" placeholder="+260 123 456 789">
-                                </div>
-                                <div class="col-12 mb-3">
-                                    <label class="form-label">Relationship</label>
-                                    <input type="text" class="form-control" placeholder="(e.g.Former Professor, Supervisor, etc.)">
-                                </div>
-                            </div>
-                        </div>
-            
                         <!-- Option for "Available upon request" -->
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="availableUponRequest" checked>
-                            <label class="form-check-label" for="availableUponRequest">
+                        <div class="form-check mt-3">
+                            <input class="form-check-input" type="checkbox" id="available_upon_request" name="available_upon_request">
+                            <label class="form-check-label" for="available_upon_request">
                                 <strong>Available upon request</strong> - Include this standard phrase instead of detailed references
                             </label>
                         </div>
-                        
-                        <button type="button" class="btn btn-add btn-sm mt-3">
-                            <i class="fas fa-plus me-1"></i>Add Another Reference
-                        </button>
                     </div>
-
+                        
+                    
                     <!-- Save Button -->
                     <div class="text-center mt-4">
                         <button type="submit" class="btn btn-primary btn-lg px-5 me-3 save-btn">
@@ -542,72 +798,311 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        // Work Experience dynamic form handling
-        document.addEventListener('DOMContentLoaded', function() {
-            const addExperienceBtn = document.getElementById('add-experience');
-            if (addExperienceBtn) {
-                addExperienceBtn.addEventListener('click', function() {
-                    const formsContainer = document.getElementById('experience-forms');
-                    const newForm = formsContainer.firstElementChild.cloneNode(true);
-                    
-                    // Clear input values in the new form
-                    const inputs = newForm.querySelectorAll('input, textarea');
-                    inputs.forEach(input => {
-                        if (input.type !== 'submit' && input.type !== 'button') {
-                            input.value = '';
-                        }
-                    });
-                    
-                    formsContainer.appendChild(newForm);
-                });
-            }
-
-            // Remove experience form
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('remove-experience')) {
-                    const form = e.target.closest('.experience-form');
-                    const allForms = document.querySelectorAll('.experience-form');
-                    if (allForms.length > 1) {
-                        form.remove();
-                    } else {
-                        alert('You need at least one experience entry.');
-                    }
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded - checking for buttons...');
+    
+    // Work Experience dynamic form handling
+    const addExperienceBtn = document.getElementById('add-experience');
+    if (addExperienceBtn) {
+        console.log('Found experience button');
+        addExperienceBtn.addEventListener('click', function() {
+            console.log('Adding experience form');
+            const formsContainer = document.getElementById('experience-forms');
+            const newForm = formsContainer.firstElementChild.cloneNode(true);
+            
+            // Clear input values in the new form
+            const inputs = newForm.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                if (input.type !== 'submit' && input.type !== 'button') {
+                    input.value = '';
                 }
             });
-
-            // Education dynamic form handling
-            const addEducationBtn = document.getElementById('add-education');
-            if (addEducationBtn) {
-                addEducationBtn.addEventListener('click', function() {
-                    const formsContainer = document.getElementById('education-forms');
-                    const newForm = formsContainer.firstElementChild.cloneNode(true);
-                    
-                    // Clear input values in the new form
-                    const inputs = newForm.querySelectorAll('input, textarea');
-                    inputs.forEach(input => {
-                        if (input.type !== 'submit' && input.type !== 'button') {
-                            input.value = '';
-                        }
-                    });
-                    
-                    formsContainer.appendChild(newForm);
-                });
-            }
-
-            // Remove education form
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('remove-education')) {
-                    const form = e.target.closest('.education-form');
-                    const allForms = document.querySelectorAll('.education-form');
-                    if (allForms.length > 1) {
-                        form.remove();
-                    } else {
-                        alert('You need at least one education entry.');
-                    }
-                }
-            });
+            
+            formsContainer.appendChild(newForm);
         });
-    </script>
+    }
+
+    // Remove experience form
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-experience')) {
+            const form = e.target.closest('.experience-form');
+            const allForms = document.querySelectorAll('.experience-form');
+            if (allForms.length > 1) {
+                form.remove();
+            } else {
+                alert('You need at least one experience entry.');
+            }
+        }
+    });
+
+    // Education dynamic form handling
+    const addEducationBtn = document.getElementById('add-education');
+    if (addEducationBtn) {
+        console.log('Found education button');
+        addEducationBtn.addEventListener('click', function() {
+            console.log('Adding education form');
+            const formsContainer = document.getElementById('education-forms');
+            const newForm = formsContainer.firstElementChild.cloneNode(true);
+            
+            // Clear input values in the new form
+            const inputs = newForm.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                if (input.type !== 'submit' && input.type !== 'button') {
+                    input.value = '';
+                }
+            });
+            
+            formsContainer.appendChild(newForm);
+        });
+    }
+
+    // Remove education form
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-education')) {
+            const form = e.target.closest('.education-form');
+            const allForms = document.querySelectorAll('.education-form');
+            if (allForms.length > 1) {
+                form.remove();
+            } else {
+                alert('You need at least one education entry.');
+            }
+        }
+    });
+
+    // Skills dynamic form handling
+    const addSkillBtn = document.getElementById('add-skill');
+    if (addSkillBtn) {
+        console.log('Found skill button');
+        addSkillBtn.addEventListener('click', function() {
+            console.log('Adding skill form');
+            const formsContainer = document.getElementById('skills-forms');
+            const newForm = formsContainer.firstElementChild.cloneNode(true);
+            
+            // Clear input values in the new form
+            const inputs = newForm.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                if (input.type !== 'submit' && input.type !== 'button') {
+                    if (input.tagName === 'SELECT') {
+                        input.selectedIndex = 0;
+                    } else {
+                        input.value = '';
+                    }
+                }
+            });
+            
+            formsContainer.appendChild(newForm);
+        });
+    }
+
+    // Remove skill form
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-skill')) {
+            const form = e.target.closest('.skill-form');
+            const allForms = document.querySelectorAll('.skill-form');
+            if (allForms.length > 1) {
+                form.remove();
+            } else {
+                alert('You need at least one skill entry.');
+            }
+        }
+    });
+
+    // Projects dynamic form handling - FIXED VERSION
+    const addProjectBtn = document.getElementById('add-project');
+    console.log('Looking for project button...', addProjectBtn);
+    
+    if (addProjectBtn) {
+        console.log('Found project button!');
+        addProjectBtn.addEventListener('click', function() {
+            console.log('Add project button clicked!');
+            const formsContainer = document.getElementById('projects-forms');
+            console.log('Forms container:', formsContainer);
+            
+            if (formsContainer && formsContainer.firstElementChild) {
+                const newForm = formsContainer.firstElementChild.cloneNode(true);
+                console.log('New form created:', newForm);
+                
+                // Clear input values in the new form
+                const inputs = newForm.querySelectorAll('input, textarea');
+                inputs.forEach(input => {
+                    if (input.type !== 'submit' && input.type !== 'button') {
+                        input.value = '';
+                    }
+                });
+                
+                formsContainer.appendChild(newForm);
+                console.log('New form added to container');
+            } else {
+                console.error('Could not find forms container or first child');
+            }
+        });
+    } else {
+        console.error('Could not find add-project button!');
+    }
+
+    // Remove project form
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-project')) {
+            console.log('Remove project clicked');
+            const form = e.target.closest('.project-form');
+            const allForms = document.querySelectorAll('.project-form');
+            if (allForms.length > 1) {
+                form.remove();
+            } else {
+                alert('You need at least one project entry.');
+            }
+        }
+    });
+
+    // AI Suggest Skills (placeholder for now)
+    document.getElementById('ai-suggest-skills')?.addEventListener('click', function() {
+        alert('AI skill suggestions will be implemented soon!');
+    });
+
+    // Certifications dynamic form handling
+        const addCertificationBtn = document.getElementById('add-certification');
+        console.log('Looking for certification button...', addCertificationBtn);
+        
+        if (addCertificationBtn) {
+            console.log('Found certification button!');
+            addCertificationBtn.addEventListener('click', function() {
+                console.log('Add certification button clicked!');
+                const formsContainer = document.getElementById('certifications-forms');
+                console.log('Certifications container:', formsContainer);
+                
+                if (formsContainer && formsContainer.firstElementChild) {
+                    const newForm = formsContainer.firstElementChild.cloneNode(true);
+                    console.log('New certification form created:', newForm);
+                    
+                    // Clear input values in the new form
+                    const inputs = newForm.querySelectorAll('input, textarea');
+                    inputs.forEach(input => {
+                        if (input.type !== 'submit' && input.type !== 'button') {
+                            input.value = '';
+                        }
+                    });
+                    
+                    formsContainer.appendChild(newForm);
+                    console.log('New certification form added to container');
+                } else {
+                    console.error('Could not find certifications container or first child');
+                }
+            });
+        } else {
+            console.error('Could not find add-certification button!');
+        }
+
+        // Remove certification form
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-certification')) {
+                console.log('Remove certification clicked');
+                const form = e.target.closest('.certification-form');
+                const allForms = document.querySelectorAll('.certification-form');
+                if (allForms.length > 1) {
+                    form.remove();
+                } else {
+                    alert('You need at least one certification entry.');
+                }
+            }
+        });
+
+        // Achievements dynamic form handling
+        const addAchievementBtn = document.getElementById('add-achievement');
+        console.log('Looking for achievement button...', addAchievementBtn);
+        
+        if (addAchievementBtn) {
+            console.log('Found achievement button!');
+            addAchievementBtn.addEventListener('click', function() {
+                console.log('Add achievement button clicked!');
+                const formsContainer = document.getElementById('achievements-forms');
+                console.log('Achievements container:', formsContainer);
+                
+                if (formsContainer && formsContainer.firstElementChild) {
+                    const newForm = formsContainer.firstElementChild.cloneNode(true);
+                    console.log('New achievement form created:', newForm);
+                    
+                    // Clear input values in the new form
+                    const inputs = newForm.querySelectorAll('input, textarea');
+                    inputs.forEach(input => {
+                        if (input.type !== 'submit' && input.type !== 'button') {
+                            input.value = '';
+                        }
+                    });
+                    
+                    formsContainer.appendChild(newForm);
+                    console.log('New achievement form added to container');
+                } else {
+                    console.error('Could not find achievements container or first child');
+                }
+            });
+        } else {
+            console.error('Could not find add-achievement button!');
+        }
+
+        // Remove achievement form
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-achievement')) {
+                console.log('Remove achievement clicked');
+                const form = e.target.closest('.achievement-form');
+                const allForms = document.querySelectorAll('.achievement-form');
+                if (allForms.length > 1) {
+                    form.remove();
+                } else {
+                    alert('You need at least one achievement entry.');
+                }
+            }
+        });
+
+        // References dynamic form handling
+        const addReferenceBtn = document.getElementById('add-reference');
+        console.log('Looking for reference button...', addReferenceBtn);
+        
+        if (addReferenceBtn) {
+            console.log('Found reference button!');
+            addReferenceBtn.addEventListener('click', function() {
+                console.log('Add reference button clicked!');
+                const formsContainer = document.getElementById('references-forms');
+                console.log('References container:', formsContainer);
+                
+                if (formsContainer && formsContainer.firstElementChild) {
+                    const newForm = formsContainer.firstElementChild.cloneNode(true);
+                    console.log('New reference form created:', newForm);
+                    
+                    // Clear input values in the new form
+                    const inputs = newForm.querySelectorAll('input');
+                    inputs.forEach(input => {
+                        if (input.type !== 'submit' && input.type !== 'button') {
+                            input.value = '';
+                        }
+                    });
+                    
+                    formsContainer.appendChild(newForm);
+                    console.log('New reference form added to container');
+                } else {
+                    console.error('Could not find references container or first child');
+                }
+            });
+        } else {
+            console.error('Could not find add-reference button!');
+        }
+
+        // Remove reference form
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-reference')) {
+                console.log('Remove reference clicked');
+                const form = e.target.closest('.reference-form');
+                const allForms = document.querySelectorAll('.reference-form');
+                if (allForms.length > 1) {
+                    form.remove();
+                } else {
+                    alert('You need at least one reference entry.');
+                }
+            }
+        });
+});
+</script>
+  
 </body>
 </html>

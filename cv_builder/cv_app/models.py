@@ -69,13 +69,19 @@ class Education(models.Model):
         return f"{self.degree} at {self.institution}"
 
 class Skill(models.Model):
+    CATEGORY_CHOICES = [
+        ('technical', 'Technical Skills'),
+        ('soft', 'Soft Skills'), 
+        ('languages', 'Languages'),
+        ('tools', 'Tools & Technologies'),
+    ]
+    
     cv = models.ForeignKey(CV, on_delete=models.CASCADE, related_name='skills')
-    name = models.CharField(max_length=50)
-    category = models.CharField(max_length=50, blank=True)
-    proficiency = models.CharField(max_length=20, blank=True)
+    name = models.CharField(max_length=100)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='technical')
     
     def _str_(self):
-        return self.name
+        return f"{self.name} ({self.category})"
 
 class Project(models.Model):
     cv = models.ForeignKey(CV, on_delete=models.CASCADE, related_name='projects')
@@ -109,3 +115,15 @@ class Achievement(models.Model):
     
     def _str_(self):
         return self.title
+
+class Reference(models.Model):
+    cv = models.ForeignKey(CV, on_delete=models.CASCADE, related_name='references')
+    name = models.CharField(max_length=100)
+    position = models.CharField(max_length=100)
+    company = models.CharField(max_length=100)
+    email = models.EmailField(blank=True)
+    phone = models.CharField(max_length=20, blank=True)
+    relationship = models.CharField(max_length=100, blank=True)
+    
+    def _str_(self):
+        return f"{self.name} - {self.position}"
