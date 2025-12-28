@@ -1,6 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class CVTemplate(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    # Template styling options
+    primary_color = models.CharField(max_length=7, default='#2c3e50')  # Dark blue
+    secondary_color = models.CharField(max_length=7, default='#3498db')  # Light blue
+    accent_color = models.CharField(max_length=7, default='#e74c3c')  # Red
+    font_family = models.CharField(max_length=50, default='Arial, sans-serif')
+    layout_style = models.CharField(max_length=50, default='modern')  # modern, classic, creative, minimal
+    
+    def __str__(self):
+        return self.name
+
 class CV(models.Model):
     GENDER_CHOICES = [
         ('male', 'Male'),
@@ -16,11 +32,13 @@ class CV(models.Model):
         ('widowed', 'Widowed'),
     ]
     
+    template = models.ForeignKey(CVTemplate, on_delete=models.SET_NULL, null=True, blank=True, default=1)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200, default="My CV")
     
     # Basic Info
     full_name = models.CharField(max_length=255)
+
     email = models.EmailField()
     phone = models.CharField(max_length=20)
     location = models.CharField(max_length=255)
@@ -41,7 +59,7 @@ class CV(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    def _str_(self):
+    def __str__(self):
         return f"{self.full_name} - {self.title}"
 
 class Experience(models.Model):
@@ -53,7 +71,7 @@ class Experience(models.Model):
     description = models.TextField(blank=True)
     achievements = models.TextField(blank=True)
     
-    def _str_(self):
+    def __str__(self):
         return f"{self.job_title} at {self.company}"
 
 class Education(models.Model):
@@ -65,7 +83,7 @@ class Education(models.Model):
     end_date = models.CharField(max_length=20, blank=True)
     description = models.TextField(blank=True)
     
-    def _str_(self):
+    def __str__(self):
         return f"{self.degree} at {self.institution}"
 
 class Skill(models.Model):
@@ -80,7 +98,7 @@ class Skill(models.Model):
     name = models.CharField(max_length=100)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='technical')
     
-    def _str_(self):
+    def __str__(self):
         return f"{self.name} ({self.category})"
 
 class Project(models.Model):
@@ -92,7 +110,7 @@ class Project(models.Model):
     start_date = models.CharField(max_length=20, blank=True)
     end_date = models.CharField(max_length=20, blank=True)
     
-    def _str_(self):
+    def __str__(self):
         return self.name
 
 class Certification(models.Model):
@@ -103,7 +121,7 @@ class Certification(models.Model):
     expiry_date = models.CharField(max_length=20, blank=True)
     credential_url = models.URLField(blank=True)
     
-    def _str_(self):
+    def __str__(self):
         return self.name
 
 class Achievement(models.Model):
@@ -113,7 +131,7 @@ class Achievement(models.Model):
     date = models.CharField(max_length=20, blank=True)
     description = models.TextField(blank=True)
     
-    def _str_(self):
+    def __str__(self):
         return self.title
 
 class Reference(models.Model):
@@ -125,5 +143,5 @@ class Reference(models.Model):
     phone = models.CharField(max_length=20, blank=True)
     relationship = models.CharField(max_length=100, blank=True)
     
-    def _str_(self):
+    def __str__(self):
         return f"{self.name} - {self.position}"

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Preview CV - {{ cv.title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: #c7c7c7ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Modern Professional - Template 1 */
+        .template-1 .cv-preview {
+            background: white;
+            max-width: 210mm;
+            min-height: 297mm;
+            margin: 20px auto;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .template-1 .header-section {
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .template-1 .section-title {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin: 25px 0 15px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        /* Classic Executive - Template 2 */
+        .template-2 .cv-preview {
+            background: white;
+            max-width: 210mm;
+            min-height: 297mm;
+            margin: 20px auto;
+            padding: 40px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.08);
+            border: 1px solid #e0e0e0;
+        }
+        .template-2 .header-section {
+            border-bottom: 2px solid #1a1a1a;
+            padding-bottom: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .template-2 .section-title {
+            color: #1a1a1a;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 8px;
+            margin: 30px 0 20px 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Creative Portfolio - Template 3 */
+        .template-3 .cv-preview {
+            background: white;
+            max-width: 210mm;
+            min-height: 297mm;
+            margin: 20px auto;
+            padding: 25px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        }
+        .template-3 .header-section {
+            background: linear-gradient(135deg, #2980b9, #e67e22);
+            color: white;
+            padding: 30px;
+            margin: -25px -25px 30px -25px;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+        }
+        .template-3 .section-title {
+            color: #2980b9;
+            border-left: 4px solid #e67e22;
+            padding-left: 15px;
+            margin: 30px 0 20px 0;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        /* Minimal Clean - Template 4 */
+        .template-4 .cv-preview {
+            background: white;
+            max-width: 210mm;
+            min-height: 297mm;
+            margin: 20px auto;
+            padding: 35px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+        }
+        .template-4 .header-section {
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .template-4 .section-title {
+            color: #333;
+            padding-bottom: 5px;
+            margin: 20px 0 15px 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        /* Default template */
+        .cv-preview {
+            background: white;
+            max-width: 210mm;
+            min-height: 297mm;
+            margin: 20px auto;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .header-section {
+            border-bottom: 3px solid #17093fff;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .section-title {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin: 25px 0 15px 0;
+        }
+
+        /* Common styles */
+        .contact-info {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .date-range {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        .preview-nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(8, 7, 7, 0.1);
+            padding: 15px 0;
+            margin-bottom: 20px;
+        }
+        .template-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="preview-nav">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="btn btn-outline-secondary" href="{% url 'dashboard' %}">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </a>
+                <div>
+                    <a href="{% url 'edit_cv' cv.id %}" class="btn btn-primary me-2">
+                        <i class="fas fa-edit me-1"></i>Edit CV
+                    </a>
+                    <a href="{% url 'download_cv_pdf' cv.id %}" class="btn btn-success">
+                        <i class="fas fa-download me-1"></i>Download CV
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <!-- Determine template class -->
+        {% with template_class=template.id|default:"1" %}
+        <div class="cv-preview template-{{ template_class }}">
+            <!-- Template Badge -->
+            <div class="template-badge">
+                {% if template.id == 1 %}Modern Professional
+                {% elif template.id == 2 %}Classic Executive
+                {% elif template.id == 3 %}Creative Portfolio
+                {% elif template.id == 4 %}Minimal Clean
+                {% else %}Default Template{% endif %}
+            </div>
+
+            <!-- Header Section -->
+            <div class="header-section text-center">
+                <h1 class="display-5 fw-bold">{{ cv.full_name|default:"Your Name" }}</h1>
+                <div class="contact-info">
+                    {% if cv.email %}{{ cv.email }} • {% endif %}
+                    {% if cv.phone %}{{ cv.phone }} • {% endif %}
+                    {% if cv.location %}{{ cv.location }}{% endif %}
+                </div>
+                {% if cv.linkedin_url or cv.github_url %}
+                <div class="mt-2">
+                    {% if cv.linkedin_url %}
+                        <span class="me-3"><i class="fab fa-linkedin"></i> LinkedIn</span>
+                    {% endif %}
+                    {% if cv.github_url %}
+                        <span><i class="fab fa-github"></i> GitHub</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Professional Summary -->
+            {% if cv.professional_summary %}
+            <div class="mb-4">
+                <h3 class="section-title">Professional Summary</h3>
+                <p class="mb-0">{{ cv.professional_summary }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Work Experience -->
+            {% if cv.experiences.all %}
+            <div class="mb-4">
+                <h3 class="section-title">Work Experience</h3>
+                {% for experience in cv.experiences.all %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="mb-1">{{ experience.job_title }}</h5>
+                        <span class="date-range">
+                            {{ experience.start_date }} - {{ experience.end_date|default:"Present" }}
+                        </span>
+                    </div>
+                    <h6 class="text-primary mb-2">{{ experience.company }}</h6>
+                    {% if experience.description %}
+                        <p class="mb-1">{{ experience.description }}</p>
+                    {% endif %}
+                    {% if experience.achievements %}
+                        <p class="mb-0"><strong>Achievements:</strong> {{ experience.achievements }}</p>
+                    {% endif %}
+                </div>
+                {% if not forloop.last %}<hr>{% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Education -->
+            {% if cv.educations.all %}
+            <div class="mb-4">
+                <h3 class="section-title">Education</h3>
+                {% for education in cv.educations.all %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="mb-1">{{ education.degree }}</h5>
+                        <span class="date-range">
+                            {{ education.start_date }} - {{ education.end_date }}
+                        </span>
+                    </div>
+                    <h6 class="text-primary mb-2">{{ education.institution }}</h6>
+                    {% if education.field_of_study %}
+                        <p class="mb-1"><strong>Field of Study:</strong> {{ education.field_of_study }}</p>
+                    {% endif %}
+                    {% if education.description %}
+                        <p class="mb-0">{{ education.description }}</p>
+                    {% endif %}
+                </div>
+                {% if not forloop.last %}<hr>{% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Skills -->
+            {% if cv.skills.all %}
+            <div class="mb-4">
+                <h3 class="section-title">Skills</h3>
+                <div class="row">
+                    {% for skill in cv.skills.all %}
+                    <div class="col-md-6 mb-2">
+                        <strong>{{ skill.get_category_display }}:</strong> {{ skill.name }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Projects -->
+            {% if cv.projects.all %}
+            <div class="mb-4">
+                <h3 class="section-title">Projects</h3>
+                {% for project in cv.projects.all %}
+                <div class="mb-3">
+                    <h5 class="mb-1">{{ project.name }}</h5>
+                    {% if project.technologies %}
+                        <p class="mb-1"><strong>Technologies:</strong> {{ project.technologies }}</p>
+                    {% endif %}
+                    {% if project.description %}
+                        <p class="mb-0">{{ project.description }}</p>
+                    {% endif %}
+                </div>
+                {% if not forloop.last %}<hr>{% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Certifications -->
+            {% if cv.certifications.all %}
+            <div class="mb-4">
+                <h3 class="section-title">Certifications</h3>
+                {% for certification in cv.certifications.all %}
+                <div class="mb-2">
+                    <strong>{{ certification.name }}</strong> - {{ certification.issuing_organization }}
+                    {% if certification.issue_date %} ({{ certification.issue_date }}){% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Achievements -->
+            {% if cv.achievements.all %}
+            <div class="mb-4">
+                <h3 class="section-title">Achievements</h3>
+                {% for achievement in cv.achievements.all %}
+                <div class="mb-2">
+                    <strong>{{ achievement.title }}</strong>
+                    {% if achievement.issuing_organization %} - {{ achievement.issuing_organization }}{% endif %}
+                    {% if achievement.date %} ({{ achievement.date }}){% endif %}
+                    {% if achievement.description %} - {{ achievement.description }}{% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- References -->
+            {% if cv.references.all %}
+            <div class="mb-4">
+                <h3 class="section-title">References</h3>
+                <div class="row">
+                    {% for reference in cv.references.all %}
+                    <div class="col-md-6 mb-3">
+                        <strong>{{ reference.name }}</strong><br>
+                        {{ reference.position }}<br>
+                        {{ reference.company }}<br>
+                        {% if reference.email %}{{ reference.email }}<br>{% endif %}
+                        {% if reference.phone %}{{ reference.phone }}{% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endwith %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
